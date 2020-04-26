@@ -1,6 +1,8 @@
 [image1]: ./img/image-captioning.png "Image Captioning Model"
 [image2]: ./img/coco-examples.jpg "Sample Dataset Example"
 [image3]: ./img/ResNet50-architecture.png "ResNet50"
+[image4]: ./img/COCO_sample.png "COCO Sample"
+
 
 # Image Captioning
 
@@ -26,6 +28,56 @@ The Microsoft C*ommon *Objects in COntext (MS COCO) dataset is a large-scale dat
 You can read more about the dataset on the [website](http://cocodataset.org/#home) or in the [research paper](https://arxiv.org/pdf/1405.0312.pdf).
 
 
+## Initialize COCO API and obataining batches by using the data loader
+
+#### Initialize COCO API
+
+```python
+data_dir = './cocoapi'
+data_type = 'val2014'
+
+instances_ann_file = os.path.join(data_dir, 'annotations/instances_{}.json'.format(data_type))
+coco = COCO(instances_ann_file)
+
+captions_ann_file = os.path.join(data_dir, 'annotations/captions_{}.json'.format(data_type))
+coco_caps = COCO(captions_ann_file)
+
+ids = list(coco.anns.keys())
+
+ann_id = np.random.choice(ids)
+img_id = coco.anns[ann_id]['image_id']
+img = coco.loadImgs(img_id)[0]
+url = img['coco_url']
+
+I = io.imread(url)
+matplotlib.use('TkAgg')
+plt.axis('off')
+plt.imshow(I)
+plt.show()
+```
+
+![COCO sample][image4]
+
+
+#### Obataining batches by using the data loader
+
+```python
+transform_train = transforms.Compose([
+    transforms.Resize(256),
+    transforms.RandomCrop(256),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
+])
+
+vocab_threshold = 5
+batch_size = 10
+
+data_loader = get_loader(transform=transform_train, 
+                         mode='train', batch_size=batch_size,
+                         vocab_threshold=vocab_threshold,
+                         vocab_from_file=False)
+```
 
 ## Defining CNN encoder and RNN decoder architecture
 
@@ -39,7 +91,7 @@ The encoder uses the pre-trained ResNet-50 architecture (with the final fully co
 #### RNN decoder architecture
 
 
-
+## Image Captioning Result
 
 
 

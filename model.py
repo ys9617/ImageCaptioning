@@ -23,5 +23,18 @@ class EncoderCNN(nn.Module):
         return features
 
 
+class DecoderRNN(nn.Module):
+    def __init__(self, embed_size, hidden_size, vocab_size, num_layers=1):
+        #super(DecoderRNN, self).__init__()      
+        #self.hidden_size = hidden_size
+        #self.word_embeddings = nn.Embedding(vocab_size, embed_size)
+        #self.lstm = nn.LSTM(embed_size, hidden_size)
+        pass
+        
+    def forward(self, features, captions):
+        pass
 
+    def sample(self, inputs, states=None, max_len=20):
+        " accepts pre-processed image tensor (inputs) and returns predicted sentence (list of tensor ids of length max_len) "
+        pass
 
