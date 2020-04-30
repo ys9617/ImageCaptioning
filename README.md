@@ -2,6 +2,7 @@
 [image2]: ./img/coco-examples.jpg "Sample Dataset Example"
 [image3]: ./img/ResNet50-architecture.png "ResNet50"
 [image4]: ./img/COCO_sample.png "COCO Sample"
+[image5]: ./img/decoder.png "Decoder"
 
 
 # Image Captioning
@@ -89,10 +90,19 @@ The encoder uses the pre-trained ResNet-50 architecture (with the final fully co
 
 
 #### RNN decoder architecture
+![Decoder][image5]
+
+
+## Training
+
 
 
 ## Image Captioning Result
 
+
+## References
+
+* [Show and Tell: A Neural Image Caption Generator](https://arxiv.org/pdf/1411.4555.pdf) by Oriol Vinyals et al
 
 
 
