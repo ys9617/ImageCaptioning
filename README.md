@@ -3,8 +3,8 @@
 [image3]: ./img/ResNet50-architecture.png "ResNet50"
 [image4]: ./img/COCO_sample.png "COCO Sample"
 [image5]: ./img/decoder.png "Decoder"
-[image6]: ./img/train_result.png "Training Result"
-[image7]: ./img/test_image.png "Test Image"
+[image6]: ./img/train_result.PNG "Training Result"
+[image7]: ./img/test_image.PNG "Captioning Result"
 
 
 # Image Captioning
@@ -160,7 +160,7 @@ f.close()
 
 
 ## Image Captioning Result
-![Training Result][image7]
+![Captioning Result][image7]
 
 
 
