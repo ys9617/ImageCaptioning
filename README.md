@@ -3,6 +3,8 @@
 [image3]: ./img/ResNet50-architecture.png "ResNet50"
 [image4]: ./img/COCO_sample.png "COCO Sample"
 [image5]: ./img/decoder.png "Decoder"
+[image6]: ./img/train_result.png "Training Result"
+[image7]: ./img/test_image.png "Test Image"
 
 
 # Image Captioning
@@ -94,10 +96,72 @@ The encoder uses the pre-trained ResNet-50 architecture (with the final fully co
 
 
 ## Training
+```python
+f = open(log_file, 'w')
+
+for epoch in range(1, num_epochs+1):
+    for i_step in range(1, total_step+1):
+        # Randomly sample a caption length, and sample indices with that length.
+        indices = data_loader.dataset.get_train_indices()
+        # Create and assign a batch sampler to retrieve a batch with the sampled indices.
+        new_sampler = data.sampler.SubsetRandomSampler(indices=indices)
+        data_loader.batch_sampler.sampler = new_sampler
+        
+        # Obtain the batch.
+        images, captions = next(iter(data_loader))
+
+        # Move batch of images and captions to GPU if CUDA is available.
+        images = images.to(device)
+        captions = captions.to(device)
+
+        # Zero the gradients.
+        decoder.zero_grad()
+        encoder.zero_grad()
+        
+        # Pass the inputs through the CNN-RNN model.
+        features = encoder(images)
+        outputs = decoder(features, captions)
+        
+        # Calculate the batch loss.
+        loss = criterion(outputs.view(-1, vocab_size), captions.view(-1))
+        
+        # Backward pass.
+        loss.backward()
+        
+        # Update the parameters in the optimizer.
+        optimizer.step()
+            
+        # Get training statistics.
+        stats = 'Epoch [%d/%d], Step [%d/%d], Loss: %.4f, Perplexity: %5.4f' % (epoch, num_epochs, i_step, total_step, loss.item(), np.exp(loss.item()))
+        
+        # Print training statistics (on same line).
+        print('\r' + stats, end="")
+        sys.stdout.flush()
+        
+        # Print training statistics to file.
+        f.write(stats + '\n')
+        f.flush()
+        
+        # Print training statistics (on different line).
+        if i_step % print_every == 0:
+            print('\r' + stats)
+            
+    # Save the weights.
+    if epoch % save_every == 0:
+        torch.save(decoder.state_dict(), os.path.join('./models', 'decoder-%d.pkl' % epoch))
+        torch.save(encoder.state_dict(), os.path.join('./models', 'encoder-%d.pkl' % epoch))
+
+# Close the training log file.
+f.close()
+```
+
+![Training Result][image6]
 
 
 
 ## Image Captioning Result
+![Training Result][image7]
+
 
 
 ## References
